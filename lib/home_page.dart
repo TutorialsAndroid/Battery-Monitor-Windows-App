@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> with TrayListener {
     }
 
     // Trigger notifications based on conditions
-    if (_batteryLevel == 53 || _batteryLevel == 10) {
+    if (_batteryLevel == 30 || _batteryLevel == 10) {
       _showWindowsToastNotification('Battery Level',
           'Battery level is $_batteryLevel%. Please charge your device.');
     }
