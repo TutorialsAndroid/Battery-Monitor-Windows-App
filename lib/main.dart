@@ -20,11 +20,11 @@ Future<void> main() async {
 
   const windowOptions = WindowOptions(
     alwaysOnTop: false,
-    size: Size(400, 600),
+    size: Size(400, 800),
     center: true,
     backgroundColor: Colors.transparent,
     skipTaskbar: false,
-    titleBarStyle: TitleBarStyle.hidden,
+    titleBarStyle: TitleBarStyle.normal,
   );
 
   await windowManager.waitUntilReadyToShow(windowOptions, () async {

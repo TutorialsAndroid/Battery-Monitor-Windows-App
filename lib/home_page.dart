@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:battery/about_page.dart';
 import 'package:battery/settings_page.dart';
 import 'package:battery_plus/battery_plus.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +41,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     _loadSettings();
     _getBatteryInfo();
     _startBatteryMonitoring();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1500),
@@ -583,6 +584,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             Tab(icon: Icon(Icons.battery_full), text: 'Status'),
             Tab(icon: Icon(Icons.history), text: 'History'),
             Tab(icon: Icon(Icons.settings), text: 'Settings'),
+            Tab(icon: Icon(Icons.warning_amber),text: 'About',)
           ],
         ),
       ),
@@ -594,6 +596,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             _buildBatteryInfoTab(),
             _buildHistoryTab(),
             const SettingsPage(),
+            const AboutPage(),
           ],
         ),
       ),
