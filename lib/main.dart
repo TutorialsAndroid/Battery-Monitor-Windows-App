@@ -1,39 +1,36 @@
 import 'dart:async';
 import 'dart:io';
-
-import 'package:battery/home_page.dart';
-import 'package:battery/settings_page.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tray_manager/tray_manager.dart';
 import 'package:win32/win32.dart';
 import 'package:window_manager/window_manager.dart';
 
+import 'home_page.dart';
+import 'settings_page.dart';
 import 'about_page.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  bool minimizeSystemTray = prefs.getBool('system_tray_enabled') ?? false;
-  // Must add this line.
+  final prefs = await SharedPreferences.getInstance();
+  final minimizeToTray = prefs.getBool('system_tray_enabled') ?? false;
+
   await windowManager.ensureInitialized();
 
-  WindowOptions windowOptions = const WindowOptions(
-    alwaysOnTop: true,
+  const windowOptions = WindowOptions(
+    alwaysOnTop: false,
     size: Size(400, 600),
-    // Set an initial size
     center: true,
     backgroundColor: Colors.transparent,
-    skipTaskbar: false, //hides from the taskbar
-    titleBarStyle: TitleBarStyle.hidden, //set TitleBarStyle.hidden to hide the close X button
+    skipTaskbar: false,
+    titleBarStyle: TitleBarStyle.hidden,
   );
-  windowManager.waitUntilReadyToShow(windowOptions, () async {
-    if (minimizeSystemTray) {
-      await windowManager.hide();
-    } else {
-      await windowManager.show();
-    }
+
+  await windowManager.waitUntilReadyToShow(windowOptions, () async {
+    minimizeToTray ? await windowManager.hide() : await windowManager.show();
   });
+
   runApp(const BatteryApp());
 }
 
@@ -45,25 +42,14 @@ class BatteryApp extends StatefulWidget {
 }
 
 class _BatteryAppState extends State<BatteryApp> with TrayListener {
-  int _selectedIndex = 0;
-
-  final List<Widget> _pages = [
-    const HomePage(),
-    const SettingsPage(), // New settings page
-    const AboutPage(),
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+  final RxInt _selectedIndex = 0.obs;
+  final List<Widget> _pages = const [HomePage(), SettingsPage(), AboutPage()];
 
   @override
   void initState() {
     super.initState();
     trayManager.addListener(this);
-    _initTray(); // Initialize Tray Icon
+    _initTray();
   }
 
   @override
@@ -73,58 +59,43 @@ class _BatteryAppState extends State<BatteryApp> with TrayListener {
   }
 
   @override
-  void onTrayIconMouseDown() {
-    trayManager.popUpContextMenu();
-  }
+  void onTrayIconMouseDown() => trayManager.popUpContextMenu();
 
-  /// Hide the window instead of closing
-  void _hideToTray() {
-    final hwnd = GetForegroundWindow();
-    ShowWindow(hwnd, SHOW_WINDOW_CMD.SW_HIDE); // Hides the app window
-  }
+  void _hideToTray() => ShowWindow(GetForegroundWindow(), SHOW_WINDOW_CMD.SW_HIDE);
 
-  /// Restore the app window from the tray
-  void _restoreFromTray() {
-    windowManager.show(); // Restore the window from tray
-    // final hwnd = GetForegroundWindow();
-    // ShowWindow(hwnd, SHOW_WINDOW_CMD.SW_SHOW); // Restores the app window
-  }
+  Future<void> _restoreFromTray() async => windowManager.show();
 
-  /// Initialize system tray
   Future<void> _initTray() async {
     await trayManager.setIcon('assets/icons/battery.ico');
     await trayManager.setToolTip("Battery Monitor Running...");
     await trayManager.setContextMenu(Menu(items: [
-      MenuItem(label: "Show App", onClick: (menuItem) => _restoreFromTray()),
-      MenuItem(label: "Exit", onClick: (menuItem) => exit(0)),
+      MenuItem(label: "Show App", onClick: (_) => _restoreFromTray()),
+      MenuItem(label: "Exit", onClick: (_) => exit(0)),
     ]));
   }
 
   @override
   Widget build(BuildContext context) {
     return PopScope(
-        canPop: true, // Prevents app from closing
-        onPopInvoked: (didPop) {
-          if (didPop) return;
-          _hideToTray(); // Minimize instead of closing
-        },
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          home: Scaffold(
-            body: _pages[_selectedIndex],
-            bottomNavigationBar: BottomNavigationBar(
-              currentIndex: _selectedIndex,
-              onTap: _onItemTapped,
-              items: const [
-                BottomNavigationBarItem(
-                    label: 'Home', icon: Icon(Icons.home)),
-                BottomNavigationBarItem(
-                    label: 'Settings', icon: Icon(Icons.settings)),
-                BottomNavigationBarItem(
-                    label: 'About', icon: Icon(Icons.info)),
-              ],
-            ),
-          ),
-        ));
+      canPop: true,
+      onPopInvoked: (didPop) {
+        if (!didPop) _hideToTray();
+      },
+      child: GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(
+          body: Obx(() => _pages[_selectedIndex.value]),
+          // bottomNavigationBar: Obx(() => BottomNavigationBar(
+          //   currentIndex: _selectedIndex.value,
+          //   onTap: (index) => _selectedIndex.value = index,
+          //   items: const [
+          //     BottomNavigationBarItem(label: 'Home', icon: Icon(Icons.home)),
+          //     BottomNavigationBarItem(label: 'Settings', icon: Icon(Icons.settings)),
+          //     BottomNavigationBarItem(label: 'About', icon: Icon(Icons.info)),
+          //   ],
+          // )),
+        ),
+      ),
+    );
   }
 }
