@@ -80,15 +80,24 @@ class _HomePageState extends State<HomePage> with TrayListener {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        backgroundColor: Colors.grey[900],
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text('Battery Level: $_batteryLevel%',
-                  style: const TextStyle(fontSize: 24)),
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.greenAccent,
+                ),
+              ),
               Text(
                   'Charging Status: ${_isCharging ? "Charging" : "Not Charging"}',
-                  style: const TextStyle(fontSize: 18)),
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white70,
+                )),
               const SizedBox(
                 height: 16,
               ),

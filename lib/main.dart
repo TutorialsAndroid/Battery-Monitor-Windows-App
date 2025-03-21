@@ -19,7 +19,7 @@ void main() async {
   await windowManager.ensureInitialized();
 
   WindowOptions windowOptions = const WindowOptions(
-    alwaysOnTop: true,
+    alwaysOnTop: false,
     size: Size(400, 600),
     // Set an initial size
     center: true,
@@ -113,6 +113,9 @@ class _BatteryAppState extends State<BatteryApp> with TrayListener {
           home: Scaffold(
             body: _pages[_selectedIndex],
             bottomNavigationBar: BottomNavigationBar(
+              selectedItemColor: Colors.deepOrange,
+              unselectedItemColor: Colors.white54,
+              backgroundColor:  Colors.grey[900],
               currentIndex: _selectedIndex,
               onTap: _onItemTapped,
               items: const [
@@ -125,6 +128,7 @@ class _BatteryAppState extends State<BatteryApp> with TrayListener {
               ],
             ),
           ),
-        ));
+        )
+    );
   }
 }
