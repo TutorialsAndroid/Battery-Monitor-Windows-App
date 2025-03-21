@@ -65,38 +65,48 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.grey[900],
         body: Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
             children: [
-              const Text('Enable on Startup', style: TextStyle(fontSize: 18)),
-              const Spacer(),
-              Switch(
-                value: _isStartupEnabled,
-                onChanged: (value) => _toggleStartup(value),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('Enable on Startup',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white70,
+                      )),
+                  const Spacer(),
+                  Switch(
+                    value: _isStartupEnabled,
+                    activeColor: Colors.greenAccent,
+                    onChanged: (value) => _toggleStartup(value),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('Minimize in System Tray',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white70,
+                      )),
+                  const Spacer(),
+                  Switch(
+                    value: _minimizeSystemTray,
+                    activeColor: Colors.greenAccent,
+                    onChanged: (value) => _toggleSystemTray(value),
+                  ),
+                ],
               ),
             ],
           ),
-          const SizedBox(
-            height: 8,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text('Minimize in System Tray',
-                  style: TextStyle(fontSize: 18)),
-              const Spacer(),
-              Switch(
-                value: _minimizeSystemTray,
-                onChanged: (value) => _toggleSystemTray(value),
-              ),
-            ],
-          ),
-        ],
-      ),
-    ));
+        ));
   }
 }

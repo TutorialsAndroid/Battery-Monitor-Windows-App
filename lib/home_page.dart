@@ -86,7 +86,7 @@ class _HomePageState extends State<HomePage> with TrayListener {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text('Battery Level: $_batteryLevel%',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                   color: Colors.greenAccent,
@@ -94,7 +94,7 @@ class _HomePageState extends State<HomePage> with TrayListener {
               ),
               Text(
                   'Charging Status: ${_isCharging ? "Charging" : "Not Charging"}',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16,
                   color: Colors.white70,
                 )),
