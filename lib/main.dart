@@ -17,6 +17,7 @@ void main() async {
   bool minimizeSystemTray = prefs.getBool('system_tray_enabled') ?? false;
   // Must add this line.
   await windowManager.ensureInitialized();
+  await windowManager.setResizable(false);
 
   WindowOptions windowOptions = const WindowOptions(
     alwaysOnTop: false,
