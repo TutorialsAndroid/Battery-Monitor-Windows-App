@@ -20,7 +20,7 @@ void main() async {
   await windowManager.setResizable(false);
 
   WindowOptions windowOptions = const WindowOptions(
-    alwaysOnTop: false,
+    alwaysOnTop: true,
     size: Size(400, 600),
     // Set an initial size
     center: true,
