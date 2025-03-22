@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class AboutPage extends StatefulWidget {
+class AboutPage extends StatelessWidget {
   const AboutPage({super.key});
 
-  @override
-  State<AboutPage> createState() => _AboutPageState();
-}
+  void _launchURL(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
-class _AboutPageState extends State<AboutPage> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
