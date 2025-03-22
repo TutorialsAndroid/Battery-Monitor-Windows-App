@@ -59,6 +59,10 @@ A sleek and intuitive desktop application to monitor your battery status, get al
 ## 🔍 Contributing
 Contributions are welcome! Please fork the repository and create a pull request.
 
+## Contributors
+- [@TutorialsAndroid](https://github.com/TutorialsAndroid)
+- [@AmirrezaKhezerlou](https://github.com/AmirrezaKhezerlou)
+
 ## 📞 Contact
 - GitHub: [TutorialsAndroid](https://github.com/TutorialsAndroid)
 - Email: akshaysunilmasram@yahoo.com
